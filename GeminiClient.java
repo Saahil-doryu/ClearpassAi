@@ -10,7 +10,7 @@ public class GeminiClient {
         this.apiKey = apiKey;
         this.model = model;
     }
-
+    
     public String generateResponse(String prompt) throws IOException {
         String inputJson = "{\n" +
                 "  \"contents\": [\n" +
