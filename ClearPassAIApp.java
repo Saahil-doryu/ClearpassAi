@@ -15,9 +15,12 @@ public class ClearPassAIApp extends JFrame {
         geminiClient = new GeminiClient("AIzaSyDjIVnRqT1mcY-mh7QsKBIUF2Eb-__tiac", "gemini-1.5-flash");
 
         setTitle("ClearPass AI - Interview Coach");
-        setSize(600, 700);
+        setSize(800, 700);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
+
+        JPanel parentPanel = new JPanel(new BorderLayout());
+        parentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // 20px padding on all sides
 
         // Top panel for role input and buttons
         JPanel topPanel = new JPanel(new FlowLayout());
@@ -50,15 +53,42 @@ public class ClearPassAIApp extends JFrame {
         centerPanel.add(new JLabel("AI Feedback:"));
         centerPanel.add(new JScrollPane(feedbackArea));
 
+        // Block user to copy paste and cut as well
+        answerInput.getInputMap().put(KeyStroke.getKeyStroke("ctrl C"), "none");
+        answerInput.getInputMap().put(KeyStroke.getKeyStroke("ctrl V"), "none");
+        answerInput.getInputMap().put(KeyStroke.getKeyStroke("ctrl X"), "none");
+
+        answerInput.setComponentPopupMenu(null);
+
+        // Blocking it to access Clipboard
+        answerInput.setTransferHandler(null);
+
+        // Blocking the Question and feedback field
+        questionArea.setEditable(false);
+        feedbackArea.setEditable(false);
+
         // Add to frame
-        add(topPanel, BorderLayout.NORTH);
-        add(centerPanel, BorderLayout.CENTER);
+        parentPanel.add(topPanel, BorderLayout.NORTH);
+        parentPanel.add(centerPanel, BorderLayout.CENTER);
+        add(parentPanel);
 
         // Action Listeners
         generateBtn.addActionListener((ActionEvent e) -> {
             String role = roleInput.getText().trim();
             if (!role.isEmpty()) {
-                String prompt = "Generate an interview question suitable for the job role of " + role;
+                String prompt = "Imagine you are an expert interviewer. The candidate is applying for the job role: \""
+                        + role + "\". " +
+                        "Please create a thoughtful and beginner-friendly interview question. " +
+                        "If the role is related to technology (like software development, web development, data science, IT, etc.), then add a simple coding-related question too, such as: "
+                        +
+                        "'Complete this small code snippet', 'Find and fix the error', or 'Explain this basic concept'. "
+                        +
+                        "If the role is non-technical (business, management, arts, etc.), ask a soft-skill or behavioral question. "
+                        +
+                        "Your output should be ONLY the interview question itself, written naturally, and easy for a user to understand. "
+                        +
+                        "Do not include any labels like 'Interview Question:' or any explanation.";
+
                 try {
                     questionArea.setText(geminiClient.generateResponse(prompt));
                 } catch (IOException ex) {
