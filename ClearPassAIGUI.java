@@ -4,7 +4,8 @@ import java.awt.*;
 public class ClearPassAIGUI extends JFrame {
     private CardLayout cardLayout;
     private JPanel mainPanel;
-
+    
+    private LoginPage loginPage;
     private WelcomeScreen welcomeScreen;
     private InterviewScreen interviewScreen;
     private ResultScreen resultScreen;
@@ -24,12 +25,14 @@ public class ClearPassAIGUI extends JFrame {
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
 
-        // Initialize all the Screens and pass this controller into them
+        // Initialize all the Screens and pass controller into them
+        loginPage = new LoginPage(this);
         welcomeScreen = new WelcomeScreen(this);
         interviewScreen = new InterviewScreen(this);
         resultScreen = new ResultScreen(this);
 
         // screens are added to CardLayout
+        mainPanel.add(loginPage, "Login");
         mainPanel.add(welcomeScreen, "Welcome");
         mainPanel.add(interviewScreen, "Interview");
         mainPanel.add(resultScreen, "Results");
@@ -37,8 +40,8 @@ public class ClearPassAIGUI extends JFrame {
         // the main panel is added to the frame
         add(mainPanel);
 
-        // Start on the Welcome screen
-        showScreen("Welcome");
+        // Start on the Login screen
+        showScreen("Login");
     }
 
     // Method to change screens
@@ -63,5 +66,12 @@ public class ClearPassAIGUI extends JFrame {
 	}
 	public void setRole(String role) {
 	    this.role = role;
+	}
+	
+	public static void main(String[] args) {
+	    SwingUtilities.invokeLater(() -> {
+	        ClearPassAIGUI app = new ClearPassAIGUI();
+	        app.setVisible(true);
+	    });
 	}
 }
