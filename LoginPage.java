@@ -3,19 +3,22 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 
-public class LoginPage extends JFrame {
+public class LoginPage extends JPanel {
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JButton loginButton, signupButton;
     private JLabel statusLabel;
     private boolean isSignUpMode = false; // Toggle between login/signup modes
-
-    public LoginPage() {
-        setTitle("ClearPass AI - Login");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    private ClearPassAIGUI controller;
+    
+    public LoginPage(ClearPassAIGUI controller) {
+    	this.controller = controller;
+    	//setTitle("ClearPass AI - Login");
+    	setName("ClearPass AI - Login");
+    	//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400, 350);
-        setLocationRelativeTo(null);
-        setResizable(false);
+        //setLocationRelativeTo(null);
+        //setResizable(false);
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -75,6 +78,7 @@ public class LoginPage extends JFrame {
         add(mainPanel);
     }
 
+    
     // Separate listener classes
     private class LoginButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
@@ -188,24 +192,22 @@ public class LoginPage extends JFrame {
     }
 
     private void handleSuccessfulLogin() {
-        dispose();
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new ClearPassAIApp().setVisible(true);
-            }
-        });
+        controller.showScreen("Welcome");
+        //dispose();
     }
 
     private void showMessage(String message, Color color) {
         statusLabel.setText(message);
         statusLabel.setForeground(color);
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new LoginPage().setVisible(true);
-            }
-        });
-    }
+    
+//		no longer needed now that all screens are managed by ClearPassGUI
+//    
+//    	public static void main(String[] args) {
+//        SwingUtilities.invokeLater(new Runnable() {
+//            public void run() {
+//                new LoginPage().setVisible(true);
+//            }
+//        });
+//    }
 }
