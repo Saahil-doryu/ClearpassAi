@@ -1,3 +1,4 @@
+*.class
 /AiPrompt.class
 /ClearPassAIApp.class
 /GeminiClient.class
