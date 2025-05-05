@@ -42,7 +42,7 @@ public class InterviewScreen extends JPanel {
 
         add(topPanel, BorderLayout.NORTH);
         add(centerPanel, BorderLayout.CENTER);
-
+        
         // Action Listeners
         generateBtn.addActionListener(new ActionListener() 
         {

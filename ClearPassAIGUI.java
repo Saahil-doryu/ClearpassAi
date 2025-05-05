@@ -19,7 +19,7 @@ public class ClearPassAIGUI extends JFrame {
 
         // Initialize GeminiClient
         geminiClient = new GeminiClient("AIzaSyDjIVnRqT1mcY-mh7QsKBIUF2Eb-__tiac", "gemini-1.5-flash");
-
+        
         // Set up CardLayout
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
