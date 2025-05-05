@@ -24,8 +24,8 @@ public class WelcomeScreen extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 String role = roleField.getText().trim();
                 if (!role.isEmpty()) {
-                	controller.setRole(role);
-                    controller.startSession(role, 5); 
+                    controller.setRole(role);
+                    controller.startSession(role, 5);
                 }
             }
         });

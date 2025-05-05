@@ -4,7 +4,7 @@ import java.awt.*;
 public class ClearPassAIGUI extends JFrame {
     private CardLayout cardLayout;
     private JPanel mainPanel;
-    
+
     private LoginPage loginPage;
     private WelcomeScreen welcomeScreen;
     private InterviewScreen interviewScreen;
@@ -57,21 +57,22 @@ public class ClearPassAIGUI extends JFrame {
         showScreen("Results");
     }
 
-	public GeminiClient getGeminiClient() {
-		return this.geminiClient;
-	}
+    public GeminiClient getGeminiClient() {
+        return this.geminiClient;
+    }
 
-	public String getRole() {
-		return role;
-	}
-	public void setRole(String role) {
-	    this.role = role;
-	}
-	
-	public static void main(String[] args) {
-	    SwingUtilities.invokeLater(() -> {
-	        ClearPassAIGUI app = new ClearPassAIGUI();
-	        app.setVisible(true);
-	    });
-	}
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            ClearPassAIGUI app = new ClearPassAIGUI();
+            app.setVisible(true);
+        });
+    }
 }
