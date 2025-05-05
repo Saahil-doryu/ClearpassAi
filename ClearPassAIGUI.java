@@ -10,7 +10,8 @@ public class ClearPassAIGUI extends JFrame {
     private ResultScreen resultScreen;
     private String role;
     private GeminiClient geminiClient;
-
+    private DataModel dataModel;
+    	
     public ClearPassAIGUI() {
         // Setup the JFrame
         setTitle("ClearPass AI - Interview Coach");
@@ -19,6 +20,9 @@ public class ClearPassAIGUI extends JFrame {
 
         // Initialize GeminiClient
         geminiClient = new GeminiClient("AIzaSyDjIVnRqT1mcY-mh7QsKBIUF2Eb-__tiac", "gemini-1.5-flash");
+        
+        // Initialize DataModel
+        dataModel = new DataModel();
         
         // Set up CardLayout
         cardLayout = new CardLayout();
@@ -41,19 +45,16 @@ public class ClearPassAIGUI extends JFrame {
         showScreen("Welcome");
     }
 
-    // Method to change screens
+
     public void showScreen(String screenName) {
         cardLayout.show(mainPanel, screenName);
     }
 
-    // Later methods to control the session (we will fill these in)
     public void startSession(String role, int questionCount) {
-        // TODO: Set up InterviewSession and load it into InterviewScreen
         showScreen("Interview");
     }
 
     public void finishSession() {
-        // TODO: After interview is done, show results
         showScreen("Results");
     }
 
@@ -62,10 +63,13 @@ public class ClearPassAIGUI extends JFrame {
 	}
 
 	public String getRole() {
-		// TODO Auto-generated method stub
 		return role;
 	}
 	public void setRole(String role) {
 	    this.role = role;
+	}
+	
+	public DataModel getDataModel() {
+		return dataModel;
 	}
 }

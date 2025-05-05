@@ -1,7 +1,8 @@
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
+import org.json.JSONArray;
+import org.json.JSONObject;
 public class GeminiClient {
     private final String apiKey;
     private final String model;
@@ -50,13 +51,17 @@ public class GeminiClient {
     }
 
     private String extractTextFromResponse(String raw) {
-        int startIndex = raw.indexOf("\"text\": \"");
-        if (startIndex == -1)
-            return "Error: Could not parse Gemini response.";
-        startIndex += 9;
-        int endIndex = raw.indexOf("\"", startIndex);
-        if (endIndex == -1)
-            return "Error: Response not complete.";
-        return raw.substring(startIndex, endIndex).replace("\\n", "\n");
+        try {
+        	JSONObject json = new JSONObject(raw);
+        	JSONArray candidates = json.getJSONArray("candidates");
+        	JSONObject firstCandiate = candidates.getJSONObject(0);
+        	JSONObject content = firstCandiate.getJSONObject("content");
+        	JSONArray parts = content.getJSONArray("parts");
+        	return parts.getJSONObject(0).getString("text");
+        } catch (Exception e) {
+        	return "Error: Response not complete.";
+        }
+    	
     }
+
 }

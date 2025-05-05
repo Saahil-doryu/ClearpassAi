@@ -1,10 +1,10 @@
 
-public class QuestionFeedback {
+public class QuestionData {
 	private String question;
 	private String answer;
 	private String feedback;
 
-	public  QuestionFeedback() {
+	public  QuestionData() {
 		this.question = "";
 		this.feedback = "";
 		this.answer = "";
