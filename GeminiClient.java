@@ -24,7 +24,7 @@ public class GeminiClient {
                 "}";
 
         @SuppressWarnings("deprecation")
-		URL url = new URL(
+        URL url = new URL(
                 "https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent?key=" + apiKey);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
