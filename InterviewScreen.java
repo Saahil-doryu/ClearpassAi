@@ -1,7 +1,10 @@
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import org.json.JSONObject;
+import org.json.JSONArray;
 
 public class InterviewScreen extends JPanel {
     private ClearPassAIGUI controller;
@@ -13,6 +16,9 @@ public class InterviewScreen extends JPanel {
     private JLabel timerLabel = new JLabel("Time Left: 60s");
     private Timer timer;
     private int timeLeft = 60;
+    private String question = "";
+    private String answer = "";
+    private String feedback = "";
 
     public InterviewScreen(ClearPassAIGUI controller) {
         this.controller = controller;
@@ -22,6 +28,7 @@ public class InterviewScreen extends JPanel {
         questionArea = new JTextArea(5, 50);
         answerInput = new JTextArea(5, 50);
         feedbackArea = new JTextArea(5, 50);
+
 
         questionArea.setLineWrap(true);
         answerInput.setLineWrap(true);
@@ -62,6 +69,16 @@ public class InterviewScreen extends JPanel {
         centerPanel.add(new JLabel("AI Feedback:"));
         centerPanel.add(new JScrollPane(feedbackArea));
 
+
+        
+        JButton generateBtn = new JButton("Generate Question");
+        JButton evaluateBtn = new JButton("Evaluate Answer");
+
+        JPanel topPanel = new JPanel(new FlowLayout());
+        topPanel.add(generateBtn);
+        topPanel.add(evaluateBtn);
+
+  
         centerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         add(topPanel, BorderLayout.NORTH);
@@ -93,6 +110,7 @@ public class InterviewScreen extends JPanel {
                 try {
                     String feedback = controller.getGeminiClient().generateResponse(evalPrompt);
                     feedbackArea.setText(feedback);
+                    recordAnswer(question,  answer,  feedback);
                 } catch (IOException ex) {
                     feedbackArea.setText("Error: " + ex.getMessage());
                 }
@@ -145,5 +163,15 @@ public class InterviewScreen extends JPanel {
             timer.stop();
         }
         startTimer();
+    }
+     //method to record the user's response to a QuestionData Object and then save it to the DataModel
+    private void recordAnswer(String question, String answer, String feedback ) {
+    	
+    	  QuestionData qd = new QuestionData();
+    	  qd.setQuestion(question);
+    	  qd.setAnswer(answer);
+    	  qd.setFeedback(feedback);
+  
+        controller.getDataModel().setHistory(qd);
     }
 }
