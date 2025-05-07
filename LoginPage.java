@@ -8,119 +8,82 @@ public class LoginPage extends JPanel {
     private JPasswordField passwordField;
     private JButton loginButton, signupButton;
     private JLabel statusLabel;
-    private boolean isSignUpMode = false; // Toggle between login/signup modes
+    private boolean isSignUpMode = false;
     private ClearPassAIGUI controller;
-    
+
     public LoginPage(ClearPassAIGUI controller) {
-    	this.controller = controller;
-    	//setTitle("ClearPass AI - Login");
-    	setName("ClearPass AI - Login");
-    	//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 350);
-        //setLocationRelativeTo(null);
-        //setResizable(false);
-
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-
-        JLabel titleLabel = new JLabel("Welcome to ClearPass AI");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        mainPanel.add(titleLabel);
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-
-        JPanel formPanel = new JPanel();
-        formPanel.setLayout(new GridBagLayout());
+        this.controller = controller;
+        setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Username Label + Field
+        JLabel titleLabel = new JLabel("Welcome to ClearPass AI", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         gbc.gridx = 0;
         gbc.gridy = 0;
-        formPanel.add(new JLabel("Username:"), gbc);
+        gbc.gridwidth = 2;
+        add(titleLabel, gbc);
 
+        gbc.gridy++;
+        gbc.gridwidth = 1;
+        add(new JLabel("Username:"), gbc);
         gbc.gridx = 1;
-        usernameField = new JTextField(20);
-        formPanel.add(usernameField, gbc);
+        usernameField = new JTextField(15);
+        add(usernameField, gbc);
 
-        // Password Label + Field
         gbc.gridx = 0;
-        gbc.gridy = 1;
-        formPanel.add(new JLabel("Password:"), gbc);
-
+        gbc.gridy++;
+        add(new JLabel("Password:"), gbc);
         gbc.gridx = 1;
-        passwordField = new JPasswordField(20);
-        formPanel.add(passwordField, gbc);
+        passwordField = new JPasswordField(15);
+        add(passwordField, gbc);
 
-        mainPanel.add(formPanel);
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.gridwidth = 2;
         loginButton = new JButton("Login");
-        loginButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        loginButton.setPreferredSize(new Dimension(120, 30));
-        loginButton.addActionListener(new LoginButtonListener());
-        mainPanel.add(loginButton);
-
         signupButton = new JButton("Sign Up");
-        signupButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        signupButton.setPreferredSize(new Dimension(120, 30));
-        signupButton.addActionListener(new SignupButtonListener());
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        mainPanel.add(signupButton);
+        JPanel buttonPanel = new JPanel(new FlowLayout());
+        buttonPanel.add(loginButton);
+        buttonPanel.add(signupButton);
+        add(buttonPanel, gbc);
 
-        statusLabel = new JLabel("");
-        statusLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        mainPanel.add(statusLabel);
+        gbc.gridy++;
+        statusLabel = new JLabel("", SwingConstants.CENTER);
+        add(statusLabel, gbc);
 
-        add(mainPanel);
-    }
-
-    
-    // Separate listener classes
-    private class LoginButtonListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            if (isSignUpMode) {
+        loginButton.addActionListener(e -> {
+            if (isSignUpMode)
                 handleSignUp();
-            } else {
+            else
                 handleLogin();
-            }
-        }
+        });
+
+        signupButton.addActionListener(e -> toggleMode());
     }
 
-    private class SignupButtonListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            toggleSignUpMode();
-        }
-    }
-
-    private void toggleSignUpMode() {
+    private void toggleMode() {
         isSignUpMode = !isSignUpMode;
-        if (isSignUpMode) {
-            loginButton.setText("Create Account");
-            signupButton.setText("Back to Login");
-        } else {
-            loginButton.setText("Login");
-            signupButton.setText("Sign Up");
-        }
+        loginButton.setText(isSignUpMode ? "Create Account" : "Login");
+        signupButton.setText(isSignUpMode ? "Back to Login" : "Sign Up");
         statusLabel.setText("");
     }
 
     private void handleLogin() {
-        String username = usernameField.getText();
+        String username = usernameField.getText().trim();
         String password = new String(passwordField.getPassword());
 
         if (username.isEmpty() || password.isEmpty()) {
-            showMessage("Please enter username and password", Color.RED);
+            showMessage("Please enter both fields", Color.RED);
             return;
         }
 
         if (authenticate(username, password)) {
-            handleSuccessfulLogin();
+            controller.setCurrentUser(username);
+            controller.showScreen("Welcome");
         } else {
-            showMessage("Invalid username or password", Color.RED);
+            showMessage("Invalid credentials", Color.RED);
         }
     }
 
@@ -133,17 +96,13 @@ public class LoginPage extends JPanel {
             return;
         }
 
+        File file = new File("users.txt");
         try {
-            File file = new File("users.txt");
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-
+            file.createNewFile();
             BufferedReader reader = new BufferedReader(new FileReader(file));
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(":");
-                if (parts[0].equals(username)) {
+                if (line.startsWith(username + ":")) {
                     reader.close();
                     showMessage("Username already exists", Color.RED);
                     return;
@@ -156,58 +115,31 @@ public class LoginPage extends JPanel {
             writer.newLine();
             writer.close();
 
-            JOptionPane.showMessageDialog(this, "Account created successfully! Please login.");
-            toggleSignUpMode();
+            JOptionPane.showMessageDialog(this, "Account created successfully!");
+            toggleMode();
         } catch (IOException ex) {
-            ex.printStackTrace();
-            showMessage("Error saving account", Color.RED);
+            showMessage("Error accessing file", Color.RED);
         }
     }
 
     private boolean authenticate(String username, String password) {
-        try {
-            File file = new File("users.txt");
-            if (!file.exists()) {
-                return false;
-            }
-
-            BufferedReader reader = new BufferedReader(new FileReader(file));
+        File file = new File("users.txt");
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(":");
-                if (parts.length == 2) {
-                    String savedUsername = parts[0];
-                    String savedPassword = parts[1];
-                    if (savedUsername.equals(username) && savedPassword.equals(password)) {
-                        reader.close();
-                        return true;
-                    }
+                if (parts.length == 2 && parts[0].equals(username) && parts[1].equals(password)) {
+                    return true;
                 }
             }
-            reader.close();
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        } catch (IOException e) {
+            showMessage("Error reading file", Color.RED);
         }
         return false;
-    }
-
-    private void handleSuccessfulLogin() {
-        controller.showScreen("Welcome");
-        //dispose();
     }
 
     private void showMessage(String message, Color color) {
         statusLabel.setText(message);
         statusLabel.setForeground(color);
     }
-    
-//		no longer needed now that all screens are managed by ClearPassGUI
-//    
-//    	public static void main(String[] args) {
-//        SwingUtilities.invokeLater(new Runnable() {
-//            public void run() {
-//                new LoginPage().setVisible(true);
-//            }
-//        });
-//    }
 }

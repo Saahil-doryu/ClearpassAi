@@ -3,6 +3,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 public class GeminiClient {
     private final String apiKey;
     private final String model;
@@ -11,19 +12,19 @@ public class GeminiClient {
         this.apiKey = apiKey;
         this.model = model;
     }
-    
+
     public String generateResponse(String prompt) throws IOException {
+        String safePrompt = prompt.replace("\"", "\\\"");
         String inputJson = "{\n" +
                 "  \"contents\": [\n" +
                 "    {\n" +
                 "      \"parts\": [\n" +
-                "        { \"text\": \"" + prompt.replace("\"", "\\\"") + "\" }\n" +
+                "        { \"text\": \"" + safePrompt + "\" }\n" +
                 "      ]\n" +
                 "    }\n" +
                 "  ]\n" +
                 "}";
 
-        @SuppressWarnings("deprecation")
         URL url = new URL(
                 "https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent?key=" + apiKey);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -32,8 +33,7 @@ public class GeminiClient {
         conn.setDoOutput(true);
 
         try (OutputStream os = conn.getOutputStream()) {
-            byte[] input = inputJson.getBytes("utf-8");
-            os.write(input, 0, input.length);
+            os.write(inputJson.getBytes("utf-8"));
         }
 
         int status = conn.getResponseCode();
@@ -52,16 +52,13 @@ public class GeminiClient {
 
     private String extractTextFromResponse(String raw) {
         try {
-        	JSONObject json = new JSONObject(raw);
-        	JSONArray candidates = json.getJSONArray("candidates");
-        	JSONObject firstCandiate = candidates.getJSONObject(0);
-        	JSONObject content = firstCandiate.getJSONObject("content");
-        	JSONArray parts = content.getJSONArray("parts");
-        	return parts.getJSONObject(0).getString("text");
+            JSONObject json = new JSONObject(raw);
+            JSONArray candidates = json.getJSONArray("candidates");
+            JSONObject content = candidates.getJSONObject(0).getJSONObject("content");
+            JSONArray parts = content.getJSONArray("parts");
+            return parts.getJSONObject(0).getString("text");
         } catch (Exception e) {
-        	return "Error: Response not complete.";
+            return "Error: Could not parse response.";
         }
-    	
     }
-
 }

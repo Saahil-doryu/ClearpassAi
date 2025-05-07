@@ -3,17 +3,16 @@ import java.util.List;
 
 public class DataModel {
 	private List<QuestionData> history;
-	
-	public DataModel () {
-		history = new ArrayList<>(5);
+
+	public DataModel() {
+		history = new ArrayList<>();
 	}
-	
-	public void setHistory(QuestionData qf ) {
-		history.add(qf);
+
+	public void setHistory(QuestionData qd) {
+		history.add(qd);
 	}
-	
-	public List<QuestionData> getHistory(){
+
+	public List<QuestionData> getHistory() {
 		return history;
 	}
-	
 }

@@ -1,177 +1,172 @@
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.IOException;
-import org.json.JSONObject;
-import org.json.JSONArray;
+import java.io.*;
 
 public class InterviewScreen extends JPanel {
     private ClearPassAIGUI controller;
     private JTextArea questionArea;
     private JTextArea answerInput;
     private JTextArea feedbackArea;
-    private JButton generateBtn, nextBtn;
-    private JButton evaluateBtn;
-    private JLabel timerLabel = new JLabel("Time Left: 60s");
+    private JButton generateBtn, nextBtn, evaluateBtn;
+    private JLabel timerLabel, counterLabel, welcomeLabel;
     private Timer timer;
     private int timeLeft = 60;
-    private String question = "";
-    private String answer = "";
-    private String feedback = "";
+    private int answeredCount = 0;
+    private int totalQuestions;
 
-    public InterviewScreen(ClearPassAIGUI controller) {
+    public InterviewScreen(ClearPassAIGUI controller, int questionCount) {
         this.controller = controller;
-        setLayout(new BorderLayout());
+        this.totalQuestions = questionCount;
+        setLayout(new BorderLayout(10, 10));
 
-        // Text Areas
-        questionArea = new JTextArea(5, 50);
-        answerInput = new JTextArea(5, 50);
-        feedbackArea = new JTextArea(5, 50);
+        String username = controller.getCurrentUser();
+        welcomeLabel = new JLabel("Welcome, " + username + "!");
+        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
+        questionArea = createTextArea(false);
+        answerInput = createTextArea(true);
+        feedbackArea = createTextArea(false);
+        disableCopyPaste(answerInput);
 
-        questionArea.setLineWrap(true);
-        answerInput.setLineWrap(true);
-        feedbackArea.setLineWrap(true);
-        questionArea.setWrapStyleWord(true);
-        answerInput.setWrapStyleWord(true);
-        feedbackArea.setWrapStyleWord(true);
-
-        // Block user from copying, pasting, and cutting
-        answerInput.getInputMap().put(KeyStroke.getKeyStroke("ctrl C"), "none");
-        answerInput.getInputMap().put(KeyStroke.getKeyStroke("ctrl V"), "none");
-        answerInput.getInputMap().put(KeyStroke.getKeyStroke("ctrl X"), "none");
-        answerInput.setComponentPopupMenu(null);
-        answerInput.setTransferHandler(null);
-
-        // Make questionArea and feedbackArea non-editable
-        questionArea.setEditable(false);
-        feedbackArea.setEditable(false);
-
-        // Buttons
         generateBtn = new JButton("Generate Question");
         evaluateBtn = new JButton("Evaluate Answer");
         nextBtn = new JButton("Next Question");
+        timerLabel = new JLabel("Time Left: 60s");
+        counterLabel = new JLabel(getCounterText());
 
-        JPanel topPanel = new JPanel(new FlowLayout());
-        topPanel.add(generateBtn);
-        topPanel.add(evaluateBtn);
-        topPanel.add(nextBtn);
-        topPanel.add(timerLabel);
+        JPanel buttonPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 10, 5, 10);
 
-        topPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        gbc.gridx = 0;
+        buttonPanel.add(generateBtn, gbc);
+        gbc.gridx = 1;
+        buttonPanel.add(evaluateBtn, gbc);
+        gbc.gridx = 2;
+        buttonPanel.add(nextBtn, gbc);
+        gbc.gridx = 3;
+        buttonPanel.add(timerLabel, gbc);
+        gbc.gridx = 4;
+        buttonPanel.add(counterLabel, gbc);
 
-        JPanel centerPanel = new JPanel(new GridLayout(6, 1));
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.add(welcomeLabel, BorderLayout.NORTH);
+        topPanel.add(buttonPanel, BorderLayout.CENTER);
+
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         centerPanel.add(new JLabel("Generated Question:"));
         centerPanel.add(new JScrollPane(questionArea));
+        centerPanel.add(Box.createVerticalStrut(10));
         centerPanel.add(new JLabel("Your Answer:"));
         centerPanel.add(new JScrollPane(answerInput));
+        centerPanel.add(Box.createVerticalStrut(10));
         centerPanel.add(new JLabel("AI Feedback:"));
         centerPanel.add(new JScrollPane(feedbackArea));
-
-
-        
-        JButton generateBtn = new JButton("Generate Question");
-        JButton evaluateBtn = new JButton("Evaluate Answer");
-
-        JPanel topPanel = new JPanel(new FlowLayout());
-        topPanel.add(generateBtn);
-        topPanel.add(evaluateBtn);
-
-  
-        centerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         add(topPanel, BorderLayout.NORTH);
         add(centerPanel, BorderLayout.CENTER);
 
-        // Action Listeners
-        generateBtn.addActionListener((ActionEvent e) -> {
-            String role = controller.getRole();
-            if (!role.isEmpty()) {
-                String prompt = "Imagine you are an expert interviewer. The candidate is applying for the job role: \""
-                        + role + "\". Please create a thoughtful and beginner-friendly interview question.";
-                try {
-                    questionArea.setText(controller.getGeminiClient().generateResponse(prompt));
-                    answerInput.setText("");
-                    feedbackArea.setText("");
-                    startTimer();
-                } catch (IOException ex) {
-                    questionArea.setText("Error: " + ex.getMessage());
-                }
-            }
-        });
+        addListeners();
+    }
 
-        evaluateBtn.addActionListener((ActionEvent e) -> {
-            String question = questionArea.getText().trim();
-            String answer = answerInput.getText().trim();
-            if (!question.isEmpty() && !answer.isEmpty()) {
-                String evalPrompt = "Evaluate this answer to the question: \"" + question + "\".\n\nAnswer: \"" + answer
-                        + "\"\n\nGive short, clear feedback.";
-                try {
-                    String feedback = controller.getGeminiClient().generateResponse(evalPrompt);
-                    feedbackArea.setText(feedback);
-                    recordAnswer(question,  answer,  feedback);
-                } catch (IOException ex) {
-                    feedbackArea.setText("Error: " + ex.getMessage());
-                }
-            }
-        });
+    private JTextArea createTextArea(boolean editable) {
+        JTextArea ta = new JTextArea(5, 50);
+        ta.setLineWrap(true);
+        ta.setWrapStyleWord(true);
+        ta.setEditable(editable);
+        return ta;
+    }
 
-        nextBtn.addActionListener((ActionEvent e) -> {
-            String role = controller.getRole();
-            if (!role.isEmpty()) {
-                String prompt = "Imagine you are an expert interviewer. The candidate is applying for the job role: \""
-                        + role + "\". Please create a new interview question.";
-                try {
-                    String newQuestion = controller.getGeminiClient().generateResponse(prompt);
-                    questionArea.setText(newQuestion);
-                    answerInput.setText("");
-                    feedbackArea.setText("");
-                    resetTimer();
-                } catch (IOException ex) {
-                    questionArea.setText("Error: " + ex.getMessage());
-                }
+    private void disableCopyPaste(JTextArea ta) {
+        ta.getInputMap().put(KeyStroke.getKeyStroke("ctrl C"), "none");
+        ta.getInputMap().put(KeyStroke.getKeyStroke("ctrl V"), "none");
+        ta.getInputMap().put(KeyStroke.getKeyStroke("ctrl X"), "none");
+        ta.setComponentPopupMenu(null);
+        ta.setTransferHandler(null);
+    }
+
+    private void addListeners() {
+        generateBtn.addActionListener(e -> generateQuestion());
+        evaluateBtn.addActionListener(e -> evaluateAnswer());
+        nextBtn.addActionListener(e -> generateBtn.doClick());
+    }
+
+    private void generateQuestion() {
+        String role = controller.getRole();
+        String username = controller.getCurrentUser();
+        if (!role.isEmpty()) {
+            String prompt = "Imagine you are an expert interviewer. The candidate is applying for the job role: \""
+                    + role + "\". Please create a thoughtful and beginner-friendly interview question.";
+            try {
+                questionArea.setText(controller.getGeminiClient().generateResponse(prompt));
+                answerInput.setText("");
+                feedbackArea.setText("");
+                startTimer();
+            } catch (IOException ex) {
+                questionArea.setText("Error: " + ex.getMessage());
             }
-        });
+        }
+    }
+
+    private void evaluateAnswer() {
+        String question = questionArea.getText().trim();
+        String answer = answerInput.getText().trim();
+        if (!question.isEmpty() && !answer.isEmpty()) {
+            String evalPrompt = "Evaluate this answer to the question: \"" + question + "\".\n\nAnswer: \"" + answer
+                    + "\"\n\nGive short, clear feedback.";
+            try {
+                String feedback = controller.getGeminiClient().generateResponse(evalPrompt);
+                feedbackArea.setText(feedback);
+                recordAnswer(question, answer, feedback);
+            } catch (IOException ex) {
+                feedbackArea.setText("Error: " + ex.getMessage());
+            }
+        }
     }
 
     private void startTimer() {
         timeLeft = 60;
-        timer = new Timer(1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (timeLeft <= 0) {
-                    ((Timer) e.getSource()).stop();
-                    nextBtn.doClick();
-                } else {
-                    timeLeft--;
-
-                    SwingUtilities.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            timerLabel.setText("Time Left: " + timeLeft + "s");
-                        }
-                    });
-                }
+        if (timer != null)
+            timer.stop();
+        timer = new Timer(1000, e -> {
+            if (timeLeft <= 0) {
+                timer.stop();
+                nextBtn.doClick();
+            } else {
+                timeLeft--;
+                timerLabel.setText("Time Left: " + timeLeft + "s");
             }
         });
         timer.start();
     }
 
-    private void resetTimer() {
-        if (timer != null) {
-            timer.stop();
-        }
-        startTimer();
-    }
-     //method to record the user's response to a QuestionData Object and then save it to the DataModel
-    private void recordAnswer(String question, String answer, String feedback ) {
-    	
-    	  QuestionData qd = new QuestionData();
-    	  qd.setQuestion(question);
-    	  qd.setAnswer(answer);
-    	  qd.setFeedback(feedback);
-  
+    private void recordAnswer(String question, String answer, String feedback) {
+        QuestionData qd = new QuestionData();
+        qd.setQuestion(question);
+        qd.setAnswer(answer);
+        qd.setFeedback(feedback);
         controller.getDataModel().setHistory(qd);
+
+        String filename = controller.getCurrentUser() + "_answers.txt";
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
+            writer.write("Q: " + question + "\nA: " + answer + "\nF: " + feedback + "\n\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        answeredCount++;
+        counterLabel.setText(getCounterText());
+
+        if (answeredCount >= totalQuestions) {
+            controller.finishSession();
+        }
+    }
+
+    private String getCounterText() {
+        return "Answered: " + answeredCount + "/" + totalQuestions;
     }
 }

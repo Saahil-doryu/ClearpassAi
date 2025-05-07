@@ -1,0 +1,5 @@
+Q: Let's say you're building a simple to-do list app.  Explain, in simple terms, how you would approach designing the user interface (UI) to make it easy and intuitive for someone to add, edit, and delete tasks.  Walk me through your thought process, considering factors like layout, visual cues, and overall user experience.  You don't need to go into specific coding, just the design principles.
+A: Hii
+F: Completely inadequate.  The answer doesn't address the question at all.
+
+
