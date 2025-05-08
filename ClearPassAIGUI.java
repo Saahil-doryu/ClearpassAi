@@ -15,6 +15,7 @@ public class ClearPassAIGUI extends JFrame {
     private String currentUser;
     private int questionCount = 5;
     private GeminiClient geminiClient;
+    private EdgeTTSClient ttsClient;
     private DataModel dataModel;
 
     public ClearPassAIGUI() {
@@ -22,8 +23,11 @@ public class ClearPassAIGUI extends JFrame {
         setSize(900, 700);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        String apiKey = loadAPIKey();
-        geminiClient = new GeminiClient(apiKey, "gemini-1.5-flash");
+        Properties props = loadConfig();
+        String geminiApiKey = props.getProperty("GEMINI_API_KEY");
+        
+        geminiClient = new GeminiClient(geminiApiKey, "gemini-1.5-flash");
+        ttsClient = new EdgeTTSClient();
         dataModel = new DataModel();
 
         cardLayout = new CardLayout();
@@ -41,15 +45,14 @@ public class ClearPassAIGUI extends JFrame {
         showScreen("Login");
     }
 
-    private String loadAPIKey() {
+    private Properties loadConfig() {
         Properties props = new Properties();
         try (FileInputStream fis = new FileInputStream("config.properties")) {
             props.load(fis);
-            return props.getProperty("GEMINI_API_KEY");
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "API key not found", "Error", JOptionPane.ERROR_MESSAGE);
-            return "";
+            JOptionPane.showMessageDialog(this, "Configuration file not found", "Error", JOptionPane.ERROR_MESSAGE);
         }
+        return props;
     }
 
     public void showScreen(String screenName) {
@@ -102,5 +105,9 @@ public class ClearPassAIGUI extends JFrame {
 
     public void setCurrentUser(String currentUser) {
         this.currentUser = currentUser;
+    }
+
+    public EdgeTTSClient getTTSClient() {
+        return ttsClient;
     }
 }

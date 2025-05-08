@@ -1,0 +1,143 @@
+Q: Let's say you're building a simple to-do list application.  You need to store the tasks, their descriptions, and whether they're completed or not.  Describe, in simple terms, how you would structure the data to represent a single task.  You can use any approach you're familiar with – it doesn't have to be perfect, but I'm interested in your thought process and how you'd approach organizing this information.
+A: kxdfjn
+F: Unacceptable.  The answer is nonsensical and provides no useful information.
+
+
+Q: Let's say you're building a simple to-do list application.  You want the user to be able to add tasks, mark tasks as complete, and see a list of all their tasks.  Describe, in simple terms, how you would approach designing the structure of this application.  You don't need to write any code, just explain the key components and how they would interact with each other.  Think about things like data storage, user interface, and the logic needed to manage the tasks.
+A: sdkvj
+F: Completely inadequate.  The answer provides no relevant information.
+
+
+Q: Let's say you're building a simple to-do list app.  You need to store each to-do item.  Describe, in as much detail as you can, how you would represent a single to-do item using a data structure.  Consider what information is important to include and how you would organize that information.  Don't worry about writing code, just explain the structure and your reasoning behind your choices.
+A: dzmfbv
+F: Unacceptable.  The answer is completely irrelevant and provides no useful information.
+
+
+Q: Let's say you're building a simple to-do list application.  You want to store the tasks the user adds.  Describe, in as much detail as you can, how you would approach storing these tasks, considering different ways to persist the data (e.g., in memory, a file, a database).  Discuss the pros and cons of each approach, focusing on factors like ease of implementation, scalability, and data persistence.  Don't worry about writing code – I'm interested in your design thinking and understanding of data storage options.
+A: sdfn
+F: Unacceptable.  The answer provides no relevant information or analysis.
+
+
+Q: Let's say you're building a simple to-do list application.  The user can add tasks, mark them as complete, and delete them.  Describe, in simple terms, how you might structure the data to represent a single to-do item.  What properties (like pieces of information) would it need, and what data type would you choose for each property?  Don't worry about specific programming languages, just focus on the conceptual design.
+A: sdfv
+F: Unacceptable.  The answer is completely irrelevant and provides no useful information.
+
+
+Q: Let's say you're building a simple to-do list application.  You need to store the tasks the user adds.  Describe how you would approach designing the data structure to represent a single task, considering what information might be important to include and why you chose those specific data types.  We're not looking for perfect code, but rather a clear explanation of your thought process.
+A: aer
+F: Unacceptable.  The answer is completely inadequate and provides no relevant information.
+
+
+Q: Let's say you're building a simple to-do list application.  You want users to be able to add tasks, mark them as complete, and delete them.  Describe, in simple terms, how you would approach designing the underlying data structure to store these tasks.  What would be the key elements of this data structure, and why did you choose them?  We're not looking for complex code, just a clear explanation of your thought process.
+A: aer
+F: Unacceptable.  The answer is completely inadequate and provides no relevant information.
+
+
+Q: Let's say you're building a simple to-do list application.  You want to store the tasks, their due dates, and whether they're completed.  Describe, in simple terms, how you might represent this data using a structure like a list of dictionaries, or perhaps even a different data structure if you prefer.  Don't worry about writing actual code, just explain the structure and why you chose it.  We're interested in your thought process more than your coding skills at this stage.
+A: ersa
+F: Unacceptable.  The answer is completely irrelevant and provides no explanation of data structures.
+
+
+Q: Let's say you're building a simple to-do list app.  You want the user to be able to add tasks, mark them as complete, and delete them.  Describe, in simple terms, how you would approach designing the data structure to store these tasks, and what considerations you would make in your design.  Don't worry about specific code, just the overall structure and your reasoning.
+A: aevr
+F: Unacceptable.  The answer is completely irrelevant and provides no information.
+
+
+Q: Let's say you're building a simple to-do list application.  You want the user to be able to add tasks, mark tasks as complete, and delete tasks.  Describe, in as much detail as you can, how you would approach designing the data structure to store the tasks, and what considerations you would make in your design.  Don't worry about writing actual code – just explain your thought process and the rationale behind your choices.
+A: zdkfj
+F: Unacceptable.  The answer is completely irrelevant and provides no useful information.
+
+Sentiment: Error: Could not parse sentiment response.
+
+Q: Let's say you're building a simple to-do list application.  You need to store each task, which includes a description (text) and whether it's completed (true/false).  Describe, in as much detail as you can, how you would represent a single task using a data structure, and explain why you chose that structure.  Feel free to use any programming language you're comfortable with to illustrate your point – even pseudocode is fine.  We're more interested in your thought process and reasoning than perfectly syntactically correct code.
+A: i'd use a dictionary with key
+F: Incomplete.  The answer needs to specify the keys and their data types (e.g., `"description": string, "completed": boolean`).  It also lacks the explanation of *why* a dictionary is a suitable choice.
+
+Sentiment: Error: Could not parse sentiment response.
+
+Q: Let's say you're building a simple to-do list application.  The user can add tasks, mark them as complete, and delete them.  Describe, in simple terms, how you might organize the data for this application.  What kind of data structures might you use, and why would you choose those over others?  You don't need to write code, just explain your thinking process.
+A: hn
+F: Unacceptable.  The answer provides no useful information.
+
+Sentiment: Error: Could not parse sentiment response.
+
+Q: Let's say you're building a simple to-do list application.  You need to store the tasks the user adds.  Describe, in as much detail as you can, how you would approach designing the data structure to hold these tasks.  Consider factors like what information each task needs to contain (e.g., description, due date, completion status), how you'd organize the tasks, and what data structure (like an array, linked list, or something else) would be most appropriate and why.  Don't worry about writing code, just explain your design choices.
+A: kjn
+F: Unacceptable.  The answer is completely inadequate and provides no relevant information.
+
+
+Q: Let's say you're building a simple to-do list application.  It needs to allow users to add tasks, mark tasks as complete, and delete tasks.  Describe, in simple terms, how you would approach designing the data structure to store these tasks. What considerations would you make when choosing your data structure, and why?  Don't worry about specific coding languages; focus on the underlying logic and design.
+A: ser
+F: Completely inadequate.  The answer provides no relevant information about data structures or design considerations.
+
+
+Q: Let's say you're building a simple to-do list application.  You want to allow users to add tasks, mark them as complete, and delete them.  Describe, in as much detail as you can, how you would approach designing the data structure to store these tasks.  Consider things like what information you need to store for each task, and what data structure (like an array, a linked list, or something else) would be most suitable and why.  Don't worry about writing actual code, just explain your design choices.
+A: advk
+F: Unacceptable.  The answer provides no relevant information.
+
+
+Q: Let's say you're building a simple to-do list application.  Imagine the user can add tasks, mark them as complete, and delete them.  Describe, in simple terms, how you would approach designing the data structure to store these tasks.  What would be the key components, and why would you choose those specific components?  Don't worry about specific programming languages or complex algorithms, just focus on the overall structure and your reasoning.
+A: kasd
+F: Unacceptable.  The answer provides no relevant information.
+
+
+Q: Let's say you're building a simple to-do list application.  Describe, in as much detail as you can, how you would approach designing the data structure to store the tasks.  Consider things like the information you'd need to store for each task (e.g., description, due date, completion status), and how you would organize that data to make it easy to add, remove, and search for tasks.  You don't need to write any code, just explain your design choices and the reasoning behind them.
+A: evr
+F: Unacceptable.  The answer provides no useful information.
+
+
+Q: Let's say you're building a simple to-do list application.  Describe, in as much detail as you can, how you would approach designing the data structure to store the to-do items. Consider things like the information you'd need to store for each item (e.g., task description, due date, completion status), and what data structure (e.g., array, linked list, hash table) would be most suitable and why.  Walk me through your thought process.
+A: erva
+F: Completely inadequate.  No relevant information provided.
+
+
+Q: Let's say you're building a simple to-do list application.  You need to store the tasks the user adds.  Describe, in simple terms, how you might represent a single task in a way a computer can understand, and what information you would include in that representation.  Then, explain why you chose those specific pieces of information.
+A: sdvsv
+F: Unacceptable.  The answer is completely irrelevant and provides no useful information.
+
+
+Q: Let's say you're building a simple to-do list app.  You want to be able to add tasks, mark them as complete, and delete them.  Describe, in simple terms, how you might structure the data to represent a single task within the application.  Consider what information you would need to store for each task, and what data type would be most appropriate for each piece of information.  Don't worry about specific coding languages; focus on the conceptual design.
+A: nknjn
+F: Unacceptable.  The answer is nonsensical and doesn't address the question.
+
+
+Q: Let's say you're building a simple to-do list application.  You want to allow users to add tasks, mark them as complete, and delete them.  Explain, in simple terms, how you would approach designing the data structure to store these tasks. What considerations would you make in choosing that structure?  Don't worry about writing code, just explain the logic and reasoning behind your choice.
+A: skejdvnioaerv
+F: The answer is completely nonsensical and provides no useful information.
+
+
+Q: Let's say you're building a simple to-do list application.  Imagine you have a list of tasks, each with a description and a completion status (true/false).  Describe, in simple terms, how you would approach designing the data structure to store this information in a program.  What would be the advantages and disadvantages of the structure you choose?  And, if you were to later add a feature allowing users to prioritize tasks (high, medium, low), how would you modify your data structure?
+A: Use an array (or list) of Task objects, each having a description string and a boolean completed flag. Advantages: straightforward, order-preserving. Disadvantages: linear search for filters. To add priorities, extend Task with a priority field (enum or string: HIGH/MEDIUM/LOW), enabling sorting or grouping by priority. Memory usage low for lists.
+F: Good, clear explanation of a basic approach.  Could mention the inefficiency of searching/filtering a large list and the improved search efficiency of other data structures (like a hash table for searching by description, or a sorted list for priority sorting).
+
+
+Q: Let's say you're building a simple to-do list application.  You want to store the tasks, their due dates, and whether they're completed.  Describe, in simple terms, how you would represent this data using a structure like a list of dictionaries, or something similar.  Don't worry about coding specifics, just explain the logic and structure you'd use.  Then, tell me how you might access and modify the information within that structure, for example, to mark a task as complete.
+A: Use an array (or list) of Task objects, each having a description string and a boolean completed flag. Advantages: straightforward, order-preserving. Disadvantages: linear search for filters. To add priorities, extend Task with a priority field (enum or string: HIGH/MEDIUM/LOW), enabling sorting or grouping by priority. Memory usage low for lists.
+F: The answer is incomplete.  It omits due dates and doesn't adequately explain access/modification.  The description of a "Task object" is too vague.  A list of dictionaries would be a more illustrative and simpler example for this prompt's level.
+
+
+Q: Let's say you're building a simple to-do list application.  Describe, in as much detail as you can, how you would approach designing the data structure to store the to-do items.  Consider things like what information each item needs to contain (e.g., task description, due date, completion status), and how you'd organize this data for efficient retrieval and modification.  You don't need to write code, but explain your reasoning and the trade-offs you'd consider.
+A: Let's say you're building a simple to-do list application.  Describe, in as much detail as you can, how you would approach designing the data structure to store the to-do items.  Consider things like what information each item needs to contain (e.g., task description, due date, completion status), and how you'd organize this data for efficient retrieval and modification.  You don't need to write code, but explain your reasoning and the trade-offs you'd consider.
+F: The answer is a verbatim repetition of the question; it provides no actual design or reasoning.  Unacceptable.
+
+
+Q: Let's say you're building a simple to-do list app.  The user can add tasks, mark them as complete, and delete them.  Describe, in simple terms, how you would approach designing the data structure to store these tasks. What would be the key elements, and why would you choose those elements?  Don't worry about specific programming languages or syntax; I'm more interested in your understanding of data organization and problem-solving.
+A: Represent tasks as records with a text description and a done flag, stored in a sequence (like a list). This preserves insertion order and allows easy iteration. Access by index for updates. For priority, add a priority attribute (enum: HIGH/MEDIUM/LOW) to each record, enabling easy sorting or partitioning by importance.
+F: Good, clear and concise.  Adding a unique ID to each task would improve robustness.
+
+
+Q: Let's say you're building a simple to-do list application.  You want to allow users to add tasks, mark them as complete, and delete them.  Describe, in simple terms, how you would approach designing the data structure to store these tasks, and why you chose that structure.  We're not looking for complex code, just a clear explanation of your thinking process.  What are the key considerations?
+A: erf
+F: Completely inadequate.  No design or reasoning provided.
+
+
+Q: Let's say you're building a simple to-do list application.  You want the user to be able to add tasks, mark them as complete, and delete them.  Explain, in simple terms, how you would approach designing the data structure to store these tasks.  What kind of data structure would you choose (like an array, a list, etc.), and why?  What properties would each element in that structure have?  Don't worry about writing code; just describe the design.
+A: dv
+F: Unacceptable.  The answer is completely inadequate and provides no relevant information.
+
+
+Q: Let's say you're building a simple to-do list application.  You need to store the tasks the user adds.  Explain how you might approach storing those tasks, considering different ways to persist the data (like keeping it in memory, writing it to a file, or using a database).  What are the advantages and disadvantages of each approach, and which would you choose for this specific application and why?  Don't worry about writing code, just focus on the design considerations.
+A: esrv
+F: Unacceptable.  The answer is completely inadequate and provides no relevant information.
+
+

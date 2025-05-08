@@ -8,7 +8,7 @@ public class InterviewScreen extends JPanel {
     private JTextArea questionArea;
     private JTextArea answerInput;
     private JTextArea feedbackArea;
-    private JButton generateBtn, nextBtn, evaluateBtn;
+    private JButton generateBtn, nextBtn, evaluateBtn, submitBtn, readBtn, stopBtn;
     private JLabel timerLabel, counterLabel, welcomeLabel;
     private Timer timer;
     private int timeLeft = 60;
@@ -28,11 +28,13 @@ public class InterviewScreen extends JPanel {
         questionArea = createTextArea(false);
         answerInput = createTextArea(true);
         feedbackArea = createTextArea(false);
-        disableCopyPaste(answerInput);
 
         generateBtn = new JButton("Generate Question");
         evaluateBtn = new JButton("Evaluate Answer");
         nextBtn = new JButton("Next Question");
+        readBtn = new JButton("Read Question");
+        stopBtn = new JButton("Stop Reading");
+        submitBtn = new JButton("Submit Interview");
         timerLabel = new JLabel("Time Left: 60s");
         counterLabel = new JLabel(getCounterText());
 
@@ -47,52 +49,75 @@ public class InterviewScreen extends JPanel {
         gbc.gridx = 2;
         buttonPanel.add(nextBtn, gbc);
         gbc.gridx = 3;
-        buttonPanel.add(timerLabel, gbc);
+        buttonPanel.add(readBtn, gbc);
         gbc.gridx = 4;
-        buttonPanel.add(counterLabel, gbc);
+        buttonPanel.add(stopBtn, gbc);
 
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.add(welcomeLabel, BorderLayout.NORTH);
         topPanel.add(buttonPanel, BorderLayout.CENTER);
 
-        JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
-        centerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        centerPanel.add(new JLabel("Generated Question:"));
-        centerPanel.add(new JScrollPane(questionArea));
-        centerPanel.add(Box.createVerticalStrut(10));
-        centerPanel.add(new JLabel("Your Answer:"));
-        centerPanel.add(new JScrollPane(answerInput));
-        centerPanel.add(Box.createVerticalStrut(10));
-        centerPanel.add(new JLabel("AI Feedback:"));
-        centerPanel.add(new JScrollPane(feedbackArea));
+        JPanel timerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        timerPanel.add(timerLabel);
+        timerPanel.add(counterLabel);
+        topPanel.add(timerPanel, BorderLayout.SOUTH);
 
         add(topPanel, BorderLayout.NORTH);
+
+        JPanel centerPanel = new JPanel(new GridLayout(3, 1, 10, 10));
+        centerPanel.add(new JScrollPane(questionArea));
+        centerPanel.add(new JScrollPane(answerInput));
+        centerPanel.add(new JScrollPane(feedbackArea));
         add(centerPanel, BorderLayout.CENTER);
+
+        // Create bottom panel for submit button
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        submitBtn.setPreferredSize(new Dimension(200, 40)); // Make submit button larger
+        bottomPanel.add(submitBtn);
+        add(bottomPanel, BorderLayout.SOUTH);
 
         addListeners();
     }
 
     private JTextArea createTextArea(boolean editable) {
-        JTextArea ta = new JTextArea(5, 50);
+        JTextArea ta = new JTextArea();
+        ta.setEditable(editable);
         ta.setLineWrap(true);
         ta.setWrapStyleWord(true);
-        ta.setEditable(editable);
+        ta.setFont(new Font("Arial", Font.PLAIN, 14));
         return ta;
-    }
-
-    private void disableCopyPaste(JTextArea ta) {
-        ta.getInputMap().put(KeyStroke.getKeyStroke("ctrl C"), "none");
-        ta.getInputMap().put(KeyStroke.getKeyStroke("ctrl V"), "none");
-        ta.getInputMap().put(KeyStroke.getKeyStroke("ctrl X"), "none");
-        ta.setComponentPopupMenu(null);
-        ta.setTransferHandler(null);
     }
 
     private void addListeners() {
         generateBtn.addActionListener(e -> generateQuestion());
         evaluateBtn.addActionListener(e -> evaluateAnswer());
         nextBtn.addActionListener(e -> generateBtn.doClick());
+        submitBtn.addActionListener(e -> {
+            if (answeredCount > 0) {
+                controller.finishSession();
+            } else {
+                JOptionPane.showMessageDialog(this, 
+                    "Please answer at least one question before submitting.", 
+                    "No Answers", 
+                    JOptionPane.WARNING_MESSAGE);
+            }
+        });
+        readBtn.addActionListener(e -> {
+            String question = questionArea.getText().trim();
+            if (!question.isEmpty()) {
+                try {
+                    controller.getTTSClient().speakText(question);
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(this,
+                        "Error reading question: " + ex.getMessage(),
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        stopBtn.addActionListener(e -> {
+            controller.getTTSClient().stopSpeaking();
+        });
     }
 
     private void generateQuestion() {
